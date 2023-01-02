@@ -34,11 +34,11 @@ def prepro(model_name):
     return ArabertPreprocessor(model_name=model_name)
 arabert_prep = prepro("bert-base-arabert")
     
-@st.cache(allow_output_mutation=True)
-def load_model():
-    model = pickle.load(open('models/NB.pkl', 'rb'))
-    return model
-NB_model = load_model()
+# @st.cache(allow_output_mutation=True)
+# def load_model():
+#     model = pickle.load(open('models/NB.pkl', 'rb'))
+#     return model
+# NB_model = load_model()
 
 ######################################
 def query(payload,model):

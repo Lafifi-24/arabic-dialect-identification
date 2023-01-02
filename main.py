@@ -29,7 +29,7 @@ test = st.container()
 def get_data():
     df = pd.read_csv('data/data_v0.1.0.csv')
     return df
-@st.cache
+@st.cache(allow_output_mutation=True)
 def prepro(model_name):
     return ArabertPreprocessor(model_name=model_name)
 arabert_prep = prepro("bert-base-arabert")

@@ -56,19 +56,29 @@ def pred(output):
         dic[i['label']]=i['score']
     return dic
 
-def preprocessing_V0_1_0(text):
-  #get just arabic text
-  text=re.sub(r'[u0600-u06FF]+', '', text).strip()
-  text=re.sub(r'[a-z]+', '', text).strip()
-  #remove duplicate letter
-  text=re.sub(r'(.)\1+', r'\1', text).strip()
-  #removing delimiters from strings
-  text=' '.join(w for w in re.split(r"\W", text) if w)
-  #remove letters
-  text=' '.join(w for w in araby.tokenize(text) if len(w)>1)
-  return text
+def preprocessing(text):
+    text=text.lower()
+    #remove links
+    text = re.sub(r'http\S+', '',  text)
+    #remove users nam
+    text=' '.join(w for w in re.split(r"@\w*",text) if w)
+    #remove English word and frensh word 
+    if re.search(r'[a-zA-Z]',text)!=None:
+        text=' '.join(w for w in text.split() if check(w))
+        #use aranisia
+        text=transliterate(text, source='ma', target='ar' , universal=True)
+    #get just arabic text
+    text=re.sub(r'[u0600-u06FF]+', '', text).strip()
+    text=re.sub(r'[a-z]+', '', text).strip()
+    #remove duplicate letter
+    text=re.sub(r'(.)\1+', r'\1', text).strip()
+    #removing delimiters from strings
+    text=' '.join(w for w in re.split(r"\W", text) if w)
+    #remove letters
+    text=' '.join(w for w in araby.tokenize(text) if len(w)>1)
+    return text
 def araBert_model(text,model):
-  text=preprocessing_V0_1_0(text)
+  text=preprocessing(text)
   output=query({'inputs':arabert_prep.preprocess(text)},model)
   return pred(output)
 ###############################
@@ -144,18 +154,18 @@ with test:
 
     
     if input:
-        if model == 'Multinomial NB':
-            opt = NB_model.predict([input])[0]
-            dc={'SA':0,'MA':0,'DZ':0,'EG':0,'SY':0,'QA':0,'LB':0,'YE':0,'AE':0,'KW':0,'SD':0,'BH':0,'JO':0,'IQ':0,'PL':0,'OM':0,'LY':0,'TN':0}
-            if opt=='MSA':
-                dc={'SA':1,'MA':1,'DZ':1,'EG':1,'SY':1,'QA':1,'LB':1,'YE':1,'AE':1,'KW':1,'SD':1,'BH':1,'JO':1,'IQ':1,'PL':1,'OM':1,'LY':1,'TN':1}
-            else:
-                dc[opt]=1
-                st.subheader('Multinomial NB')
-                a=dict(sorted(dc.items(), key = operator.itemgetter(1), reverse = True)[:4])
-                pred = pd.DataFrame.from_dict(a, orient='index').rename(columns={0:'Country'})
-                st.bar_chart(pred)
-        elif model == 'AraBert':
+        # if model == 'Multinomial NB':
+            # opt = NB_model.predict([input])[0]
+            # dc={'SA':0,'MA':0,'DZ':0,'EG':0,'SY':0,'QA':0,'LB':0,'YE':0,'AE':0,'KW':0,'SD':0,'BH':0,'JO':0,'IQ':0,'PL':0,'OM':0,'LY':0,'TN':0}
+            # if opt=='MSA':
+            #     dc={'SA':1,'MA':1,'DZ':1,'EG':1,'SY':1,'QA':1,'LB':1,'YE':1,'AE':1,'KW':1,'SD':1,'BH':1,'JO':1,'IQ':1,'PL':1,'OM':1,'LY':1,'TN':1}
+            # else:
+            #     dc[opt]=1
+            #     st.subheader('Multinomial NB')
+            #     a=dict(sorted(dc.items(), key = operator.itemgetter(1), reverse = True)[:4])
+            #     pred = pd.DataFrame.from_dict(a, orient='index').rename(columns={0:'Country'})
+            #     st.bar_chart(pred)
+        if model == 'AraBert':
             dc = araBert_model(input,"arabert")
             print("XXXXXX"+str(dc))
             st.subheader('AraBert')

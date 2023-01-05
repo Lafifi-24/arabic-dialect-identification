@@ -7,6 +7,7 @@ import folium
 from streamlit_folium import st_folium
 from arabert.preprocess import ArabertPreprocessor
 from spellchecker import SpellChecker
+from aaransia import transliterate
 check_frensh= SpellChecker(language='fr')
 check_English=SpellChecker()
 

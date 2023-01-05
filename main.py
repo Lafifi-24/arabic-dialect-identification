@@ -6,6 +6,7 @@ import numpy as np
 import folium
 from streamlit_folium import st_folium
 from arabert.preprocess import ArabertPreprocessor
+from spellchecker import SpellChecker
 
 
 import requests

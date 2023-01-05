@@ -7,6 +7,8 @@ import folium
 from streamlit_folium import st_folium
 from arabert.preprocess import ArabertPreprocessor
 from spellchecker import SpellChecker
+check_frensh= SpellChecker(language='fr')
+check_English=SpellChecker()
 
 
 import requests
@@ -56,7 +58,12 @@ def pred(output):
     for i in output[0]:
         dic[i['label']]=i['score']
     return dic
-
+def check(word):
+    if(re.search(r'[a-zA-Z]',word)!=None):
+        if word == check_English.correction(word) or word == check_frensh.correction(word):
+            return False     
+    return True
+  
 def preprocessing(text):
     text=text.lower()
     #remove links

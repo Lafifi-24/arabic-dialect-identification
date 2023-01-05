@@ -7,3 +7,4 @@ requests==2.28.1
 streamlit==1.16.0
 streamlit_folium==0.8.1
 pyspellchecker==0.7.1
+aaransia==1.1

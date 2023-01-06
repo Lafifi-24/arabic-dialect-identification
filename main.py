@@ -197,17 +197,15 @@ with test:
                     dc={'SA':1,'MA':1,'DZ':1,'EG':1,'SY':1,'QA':1,'LB':1,'YE':1,'AE':1,'KW':1,'SD':1,'BH':1,'JO':1,'IQ':1,'PL':1,'OM':1,'LY':1,'TN':1}
             i=1
         except:
+            i=0
             with st.spinner('Wait for it...'):
                 time.sleep(10)
             st.success('Done!')
-            i=0
 
+    df = pd.DataFrame(list(dc.items()),columns=['Country', 'Value'])
+    df['Country'] = df['Country'].map({'EG':'Egypt','SA':'Saudi Arabia','MA':'Morocco','DZ':'Algeria','SY':'Syria','QA':'Qatar','LB':'Lebanon','YE':'Yemen',
+    'AE':'United Arab Emirates','KW':'Kuwait','SD':'Sudan','BH':'Bahrain','JO':'Jordan','IQ':'Iraq','PL':'Palestine','OM':'Oman','LY':'Libya','TN':'Tunisia'})
+    st.write('Predicted dialect: ', opt)
 
-        
-        df = pd.DataFrame(list(dc.items()),columns=['Country', 'Value'])
-        df['Country'] = df['Country'].map({'EG':'Egypt','SA':'Saudi Arabia','MA':'Morocco','DZ':'Algeria','SY':'Syria','QA':'Qatar','LB':'Lebanon','YE':'Yemen',
-        'AE':'United Arab Emirates','KW':'Kuwait','SD':'Sudan','BH':'Bahrain','JO':'Jordan','IQ':'Iraq','PL':'Palestine','OM':'Oman','LY':'Libya','TN':'Tunisia'})
-        st.write('Predicted dialect: ', opt)
-
-        m = display_map(df)
-        st_map = st_folium(m, width=1500, height=450)
+    m = display_map(df)
+    st_map = st_folium(m, width=1500, height=450)

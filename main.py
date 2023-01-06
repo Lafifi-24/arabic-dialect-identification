@@ -46,24 +46,20 @@ arabert_prep = prepro("bert-base-arabert")
 
 ######################################
 def query(payload,model):
-    try:
-        if model=='arbert':
-            response = requests.post(API_URL_arbert, headers=headers, json=payload)
-        if model=='arabert':
-            response = requests.post(API_URL_arabert, headers=headers, json=payload)
-        if model=='arabicbert':
-            response = requests.post(API_URL_arabicbert, headers=headers, json=payload)
-    except:
-        with st.spinner('Wait for it...'):
-            time.sleep(10)
-        st.success('Done!')
-        query(payload,model)
+    if model=='arbert':
+        response = requests.post(API_URL_arbert, headers=headers, json=payload)
+    if model=='arabert':
+        response = requests.post(API_URL_arabert, headers=headers, json=payload)
+    if model=='arabicbert':
+        response = requests.post(API_URL_arabicbert, headers=headers, json=payload)
     return response.json()
 
 def pred(output):
     dic={}
+  
     for i in output[0]:
         dic[i['label']]=i['score']
+
     return dic
 def check(word):
     if(re.search(r'[a-zA-Z]',word)!=None):
@@ -93,9 +89,15 @@ def preprocessing(text):
     text=' '.join(w for w in araby.tokenize(text) if len(w)>1)
     return text
 def araBert_model(text,model):
-  text=preprocessing(text)
-  output=query({'inputs':arabert_prep.preprocess(text)},model)
-  return pred(output)
+    text=preprocessing(text)
+    output=query({'inputs':arabert_prep.preprocess(text)},model)
+    try:
+        out=pred(output)
+    except:
+        with st.spinner('Wait for it...'):
+            time.sleep(10)
+        out=araBert_model(text,model)
+    return out
 ###############################
 
 
@@ -156,21 +158,17 @@ with test:
     st.header('Models Testing')
 
     col1, col2 = st.columns([1,2])
-
-    model = col1.selectbox('Select a model', options=('AraBert','ArabicBert','ArBert'), index=0)#'Multinomial NB','Random Forest',
+    input = ''
+    model = col1.selectbox('Select a model', options=('select model','AraBert','ArabicBert','ArBert'), index=0)#'Multinomial NB','Random Forest',
     input = col2.text_input('Enter an input text:', '')
     
      #pickle.load(open('models/NB.pkl', 'rb'))
     col2.button('Predict')
     
-
+    if(len(preprocessing(input))==0):
+            st.spinner('write an arabic sentence')
     
-    #if col2.button('Predict'):
-
-    
-
-
-    if model == 'AraBert':
+    elif model == 'AraBert':
         dc = araBert_model(input,"arabert")
         print("XXXXXX"+str(dc))
         st.subheader('AraBert')
@@ -202,11 +200,13 @@ with test:
             dc={'SA':1,'MA':1,'DZ':1,'EG':1,'SY':1,'QA':1,'LB':1,'YE':1,'AE':1,'KW':1,'SD':1,'BH':1,'JO':1,'IQ':1,'PL':1,'OM':1,'LY':1,'TN':1}
 
 
+    try:
+        df = pd.DataFrame(list(dc.items()),columns=['Country', 'Value'])
+        df['Country'] = df['Country'].map({'EG':'Egypt','SA':'Saudi Arabia','MA':'Morocco','DZ':'Algeria','SY':'Syria','QA':'Qatar','LB':'Lebanon','YE':'Yemen',
+        'AE':'United Arab Emirates','KW':'Kuwait','SD':'Sudan','BH':'Bahrain','JO':'Jordan','IQ':'Iraq','PL':'Palestine','OM':'Oman','LY':'Libya','TN':'Tunisia'})
+        st.write('Predicted dialect: ', opt)
 
-    df = pd.DataFrame(list(dc.items()),columns=['Country', 'Value'])
-    df['Country'] = df['Country'].map({'EG':'Egypt','SA':'Saudi Arabia','MA':'Morocco','DZ':'Algeria','SY':'Syria','QA':'Qatar','LB':'Lebanon','YE':'Yemen',
-    'AE':'United Arab Emirates','KW':'Kuwait','SD':'Sudan','BH':'Bahrain','JO':'Jordan','IQ':'Iraq','PL':'Palestine','OM':'Oman','LY':'Libya','TN':'Tunisia'})
-    st.write('Predicted dialect: ', opt)
-
-    m = display_map(df)
-    st_map = st_folium(m, width=1500, height=450)
+        m = display_map(df)
+        st_map = st_folium(m, width=1500, height=450)
+    except:
+        pass

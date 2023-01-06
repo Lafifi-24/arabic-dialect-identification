@@ -10,7 +10,7 @@ from spellchecker import SpellChecker
 from aaransia import transliterate
 check_frensh= SpellChecker(language='fr')
 check_English=SpellChecker()
-
+import time
 
 import requests
 import re
@@ -151,7 +151,7 @@ with test:
 
     col1, col2 = st.columns([1,2])
 
-    model = col1.selectbox('Select a model', options=('Multinomial NB','Random Forest','AraBert','ArabicBert','ArBert'), index=0)
+    model = col1.selectbox('Select a model', options=('AraBert','ArabicBert','ArBert'), index=0)#'Multinomial NB','Random Forest',
     input = col2.text_input('Enter an input text:', '')
     
      #pickle.load(open('models/NB.pkl', 'rb'))
@@ -162,49 +162,45 @@ with test:
     #if col2.button('Predict'):
 
     
-    if input:
-        # if model == 'Multinomial NB':
-            # opt = NB_model.predict([input])[0]
-            # dc={'SA':0,'MA':0,'DZ':0,'EG':0,'SY':0,'QA':0,'LB':0,'YE':0,'AE':0,'KW':0,'SD':0,'BH':0,'JO':0,'IQ':0,'PL':0,'OM':0,'LY':0,'TN':0}
-            # if opt=='MSA':
-            #     dc={'SA':1,'MA':1,'DZ':1,'EG':1,'SY':1,'QA':1,'LB':1,'YE':1,'AE':1,'KW':1,'SD':1,'BH':1,'JO':1,'IQ':1,'PL':1,'OM':1,'LY':1,'TN':1}
-            # else:
-            #     dc[opt]=1
-            #     st.subheader('Multinomial NB')
-            #     a=dict(sorted(dc.items(), key = operator.itemgetter(1), reverse = True)[:4])
-            #     pred = pd.DataFrame.from_dict(a, orient='index').rename(columns={0:'Country'})
-            #     st.bar_chart(pred)
-        if model == 'AraBert':
-            dc = araBert_model(input,"arabert")
-            print("XXXXXX"+str(dc))
-            st.subheader('AraBert')
-            a=dict(sorted(dc.items(), key = operator.itemgetter(1), reverse = True)[:4])
-            pred = pd.DataFrame.from_dict(a, orient='index').rename(columns={0:'Country'})
-            st.bar_chart(pred)
-            opt = max(dc.items(), key=operator.itemgetter(1))[0]
-            if opt=='MSA':
-                dc={'SA':1,'MA':1,'DZ':1,'EG':1,'SY':1,'QA':1,'LB':1,'YE':1,'AE':1,'KW':1,'SD':1,'BH':1,'JO':1,'IQ':1,'PL':1,'OM':1,'LY':1,'TN':1}
-        elif model == 'ArabicBert':
-            dc = araBert_model(input,"arabicbert")
-            print("XXXXXX"+str(dc))
-            st.subheader('ArabicBert')
-            a=dict(sorted(dc.items(), key = operator.itemgetter(1), reverse = True)[:4])
-            pred = pd.DataFrame.from_dict(a, orient='index').rename(columns={0:'Country'})
-            st.bar_chart(pred)
-            opt = max(dc.items(), key=operator.itemgetter(1))[0]
-            if opt=='MSA':
-                dc={'SA':1,'MA':1,'DZ':1,'EG':1,'SY':1,'QA':1,'LB':1,'YE':1,'AE':1,'KW':1,'SD':1,'BH':1,'JO':1,'IQ':1,'PL':1,'OM':1,'LY':1,'TN':1}
-        elif model == 'ArBert':
-            dc = araBert_model(input,"arbert")
-            print("XXXXXX"+str(dc))
-            st.subheader('ArBert')
-            a=dict(sorted(dc.items(), key = operator.itemgetter(1), reverse = True)[:4])
-            pred = pd.DataFrame.from_dict(a, orient='index').rename(columns={0:'Country'})
-            st.bar_chart(pred)
-            opt = max(dc.items(), key=operator.itemgetter(1))[0]
-            if opt=='MSA':
-                dc={'SA':1,'MA':1,'DZ':1,'EG':1,'SY':1,'QA':1,'LB':1,'YE':1,'AE':1,'KW':1,'SD':1,'BH':1,'JO':1,'IQ':1,'PL':1,'OM':1,'LY':1,'TN':1}
-
+    i=0
+    while i==0:
+        try:
+            if model == 'AraBert':
+                dc = araBert_model(input,"arabert")
+                print("XXXXXX"+str(dc))
+                st.subheader('AraBert')
+                a=dict(sorted(dc.items(), key = operator.itemgetter(1), reverse = True)[:4])
+                pred = pd.DataFrame.from_dict(a, orient='index').rename(columns={0:'Country'})
+                st.bar_chart(pred)
+                opt = max(dc.items(), key=operator.itemgetter(1))[0]
+                if opt=='MSA':
+                    dc={'SA':1,'MA':1,'DZ':1,'EG':1,'SY':1,'QA':1,'LB':1,'YE':1,'AE':1,'KW':1,'SD':1,'BH':1,'JO':1,'IQ':1,'PL':1,'OM':1,'LY':1,'TN':1}
+            elif model == 'ArabicBert':
+                dc = araBert_model(input,"arabicbert")
+                print("XXXXXX"+str(dc))
+                st.subheader('ArabicBert')
+                a=dict(sorted(dc.items(), key = operator.itemgetter(1), reverse = True)[:4])
+                pred = pd.DataFrame.from_dict(a, orient='index').rename(columns={0:'Country'})
+                st.bar_chart(pred)
+                opt = max(dc.items(), key=operator.itemgetter(1))[0]
+                if opt=='MSA':
+                    dc={'SA':1,'MA':1,'DZ':1,'EG':1,'SY':1,'QA':1,'LB':1,'YE':1,'AE':1,'KW':1,'SD':1,'BH':1,'JO':1,'IQ':1,'PL':1,'OM':1,'LY':1,'TN':1}
+            elif model == 'ArBert':
+                dc = araBert_model(input,"arbert")
+                print("XXXXXX"+str(dc))
+                st.subheader('ArBert')
+                a=dict(sorted(dc.items(), key = operator.itemgetter(1), reverse = True)[:4])
+                pred = pd.DataFrame.from_dict(a, orient='index').rename(columns={0:'Country'})
+                st.bar_chart(pred)
+                opt = max(dc.items(), key=operator.itemgetter(1))[0]
+                if opt=='MSA':
+                    dc={'SA':1,'MA':1,'DZ':1,'EG':1,'SY':1,'QA':1,'LB':1,'YE':1,'AE':1,'KW':1,'SD':1,'BH':1,'JO':1,'IQ':1,'PL':1,'OM':1,'LY':1,'TN':1}
+            i=1
+        except:
+            with st.spinner('Wait for it...'):
+                time.sleep(10)
+            st.success('Done!')
+            i=0
 
 
         

@@ -162,45 +162,43 @@ with test:
     #if col2.button('Predict'):
 
     
-    i=0
-    while i==0:
-        try:
-            if model == 'AraBert':
-                dc = araBert_model(input,"arabert")
-                print("XXXXXX"+str(dc))
-                st.subheader('AraBert')
-                a=dict(sorted(dc.items(), key = operator.itemgetter(1), reverse = True)[:4])
-                pred = pd.DataFrame.from_dict(a, orient='index').rename(columns={0:'Country'})
-                st.bar_chart(pred)
-                opt = max(dc.items(), key=operator.itemgetter(1))[0]
-                if opt=='MSA':
-                    dc={'SA':1,'MA':1,'DZ':1,'EG':1,'SY':1,'QA':1,'LB':1,'YE':1,'AE':1,'KW':1,'SD':1,'BH':1,'JO':1,'IQ':1,'PL':1,'OM':1,'LY':1,'TN':1}
-            elif model == 'ArabicBert':
-                dc = araBert_model(input,"arabicbert")
-                print("XXXXXX"+str(dc))
-                st.subheader('ArabicBert')
-                a=dict(sorted(dc.items(), key = operator.itemgetter(1), reverse = True)[:4])
-                pred = pd.DataFrame.from_dict(a, orient='index').rename(columns={0:'Country'})
-                st.bar_chart(pred)
-                opt = max(dc.items(), key=operator.itemgetter(1))[0]
-                if opt=='MSA':
-                    dc={'SA':1,'MA':1,'DZ':1,'EG':1,'SY':1,'QA':1,'LB':1,'YE':1,'AE':1,'KW':1,'SD':1,'BH':1,'JO':1,'IQ':1,'PL':1,'OM':1,'LY':1,'TN':1}
-            elif model == 'ArBert':
-                dc = araBert_model(input,"arbert")
-                print("XXXXXX"+str(dc))
-                st.subheader('ArBert')
-                a=dict(sorted(dc.items(), key = operator.itemgetter(1), reverse = True)[:4])
-                pred = pd.DataFrame.from_dict(a, orient='index').rename(columns={0:'Country'})
-                st.bar_chart(pred)
-                opt = max(dc.items(), key=operator.itemgetter(1))[0]
-                if opt=='MSA':
-                    dc={'SA':1,'MA':1,'DZ':1,'EG':1,'SY':1,'QA':1,'LB':1,'YE':1,'AE':1,'KW':1,'SD':1,'BH':1,'JO':1,'IQ':1,'PL':1,'OM':1,'LY':1,'TN':1}
-            i=1
-        except:
-            i=0
-            with st.spinner('Wait for it...'):
-                time.sleep(10)
-            st.success('Done!')
+
+    try:
+        if model == 'AraBert':
+            dc = araBert_model(input,"arabert")
+            print("XXXXXX"+str(dc))
+            st.subheader('AraBert')
+            a=dict(sorted(dc.items(), key = operator.itemgetter(1), reverse = True)[:4])
+            pred = pd.DataFrame.from_dict(a, orient='index').rename(columns={0:'Country'})
+            st.bar_chart(pred)
+            opt = max(dc.items(), key=operator.itemgetter(1))[0]
+            if opt=='MSA':
+                dc={'SA':1,'MA':1,'DZ':1,'EG':1,'SY':1,'QA':1,'LB':1,'YE':1,'AE':1,'KW':1,'SD':1,'BH':1,'JO':1,'IQ':1,'PL':1,'OM':1,'LY':1,'TN':1}
+        elif model == 'ArabicBert':
+            dc = araBert_model(input,"arabicbert")
+            print("XXXXXX"+str(dc))
+            st.subheader('ArabicBert')
+            a=dict(sorted(dc.items(), key = operator.itemgetter(1), reverse = True)[:4])
+            pred = pd.DataFrame.from_dict(a, orient='index').rename(columns={0:'Country'})
+            st.bar_chart(pred)
+            opt = max(dc.items(), key=operator.itemgetter(1))[0]
+            if opt=='MSA':
+                dc={'SA':1,'MA':1,'DZ':1,'EG':1,'SY':1,'QA':1,'LB':1,'YE':1,'AE':1,'KW':1,'SD':1,'BH':1,'JO':1,'IQ':1,'PL':1,'OM':1,'LY':1,'TN':1}
+        elif model == 'ArBert':
+            dc = araBert_model(input,"arbert")
+            print("XXXXXX"+str(dc))
+            st.subheader('ArBert')
+            a=dict(sorted(dc.items(), key = operator.itemgetter(1), reverse = True)[:4])
+            pred = pd.DataFrame.from_dict(a, orient='index').rename(columns={0:'Country'})
+            st.bar_chart(pred)
+            opt = max(dc.items(), key=operator.itemgetter(1))[0]
+            if opt=='MSA':
+                dc={'SA':1,'MA':1,'DZ':1,'EG':1,'SY':1,'QA':1,'LB':1,'YE':1,'AE':1,'KW':1,'SD':1,'BH':1,'JO':1,'IQ':1,'PL':1,'OM':1,'LY':1,'TN':1}
+
+    except:
+        with st.spinner('Wait for it...'):
+            time.sleep(10)
+        st.success('Done!')
 
     df = pd.DataFrame(list(dc.items()),columns=['Country', 'Value'])
     df['Country'] = df['Country'].map({'EG':'Egypt','SA':'Saudi Arabia','MA':'Morocco','DZ':'Algeria','SY':'Syria','QA':'Qatar','LB':'Lebanon','YE':'Yemen',

@@ -63,7 +63,7 @@ In the confusion matrix, each small square represents a specific dialect region,
 
 #### TF-IDF + Multinomial NB
 
-![Alt text](./data/confusion_matrix/NB_hugging.png?raw=true)
+![Alt text](./data/confusion_matrix/NB_QADI.png?raw=true)
 
 ### arabic_pos_dialect test set
 #### arabert Model

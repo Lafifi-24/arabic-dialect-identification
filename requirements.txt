@@ -2,7 +2,7 @@ arabert==1.0.1
 folium==0.14.0
 numpy==1.23.3
 pandas==1.5.0
-PyArabic>=0.6.15
+PyArabic==0.6.15
 requests==2.31.0
 streamlit==1.16.0
 streamlit_folium==0.8.1

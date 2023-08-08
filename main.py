@@ -35,7 +35,7 @@ def get_data():
     return df
 @st.cache(allow_output_mutation=True)
 def prepro(model_name):
-    return ArabertPreprocessor(model_name=model_name)
+    return ArabertPreprocessor(model_name=model_name,apply_farasa_segmentation=False)
 arabert_prep = prepro("bert-base-arabert")
     
 # @st.cache(allow_output_mutation=True)
